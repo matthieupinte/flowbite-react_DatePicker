@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, useHits, useSearchBox } from "react-instantsearch";
+import { InstantSearch, useHits, useSearchBox, useRefinementList } from "react-instantsearch";
 import { format } from 'date-fns';
 import "twin.macro";
 
@@ -48,11 +48,33 @@ const CustomSearchBox = (props) => {
   );
 }
 
+const CustomRefinementList = (props) => {
+  const { items, refine } = useRefinementList(props);
+
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.label}>
+          <label>
+            <input type="checkbox" checked={item.isRefined} onChange={(e) => refine(item.value)} />
+            {item.label} ({item.count})
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 const Filters = () => (
   <aside tw="absolute top-0 left-0 z-40 w-64 h-screen p-4">
     <div>
       <h2>Search</h2>
       <CustomSearchBox />
+    </div>
+    <hr />
+    <div>
+      <h2>Kind</h2>
+      <CustomRefinementList attribute="expense_category" sortBy={["name"]} />
     </div>
   </aside>
 )
@@ -62,7 +84,7 @@ function App() {
     <section>
       <h1 tw="text-center">React App with Twin</h1>
       <div tw="relative p-4">
-        <InstantSearch searchClient={searchClient} indexName={INDEX_NAME}>
+        <InstantSearch searchClient={searchClient} indexName={INDEX_NAME} routing>
           <Filters />
           <div tw="ml-64">
             <table>

@@ -17,6 +17,14 @@ const CustomStyles = createGlobalStyle`
     ${tw`text-sm antialiased`}
   }
 
+  hr {
+    ${tw`border-0 border-t border-gray-400 my-4`}
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    ${tw`font-bold mb-2`}
+  }
+
   table {
     ${tw`border-collapse`}
   }
