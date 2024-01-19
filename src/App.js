@@ -76,15 +76,38 @@ const Filters = () => (
       <h2>Kind</h2>
       <CustomRefinementList attribute="expense_category" sortBy={["name"]} />
     </div>
+    <hr />
+    <div>
+      <h2>Supplier</h2>
+      <CustomRefinementList attribute="merchant_name" sortBy={["name"]} />
+    </div>
   </aside>
 )
 
 function App() {
+  const onStateChange = ({ uiState, setUiState }) => {
+    console.log(uiState);
+
+    return setUiState(uiState);
+  }
+
   return (
     <section>
       <h1 tw="text-center">React App with Twin</h1>
       <div tw="relative p-4">
-        <InstantSearch searchClient={searchClient} indexName={INDEX_NAME} routing>
+        <InstantSearch
+          searchClient={searchClient}
+          indexName={INDEX_NAME}
+          routing
+          onStateChange={onStateChange} future={{
+            preserveSharedStateOnUnmount: true,
+            persistHierarchicalRootCount: true,
+          }}
+          initialUiState={{
+            [`${INDEX_NAME}`]: {
+              page: 2,
+            }
+          }}>
           <Filters />
           <div tw="ml-64">
             <table>
